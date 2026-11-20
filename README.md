@@ -1,11 +1,14 @@
-# Handwritten Digit Classification — MLOps Practicals 2, 5, and 6
+# Handwritten Digit Classification — MLOps Practicals 2, 3, 5, and 6
 
-This repository contains three learning practicals using Scikit-learn's
-handwritten Digits dataset: a baseline classifier (Practical 2), a local Feast
-feature store (Practical 5), and experiment tracking with MLflow (Practical 6).
+This repository contains four learning practicals using Scikit-learn's
+handwritten Digits dataset: a baseline classifier (Practical 2), DVC dataset
+versioning (Practical 3), a local Feast feature store (Practical 5), and
+experiment tracking with MLflow (Practical 6).
 These projects are demonstrations, not OCR systems for arbitrary camera images.
 
-## Requirements
+## Practical 2: Train a digit classifier
+
+### Requirements
 
 - Python 3.11
 - Git
@@ -106,3 +109,35 @@ git push
 
 The virtual environment, generated models, MLflow database and artifacts, and
 local Feast data/state are excluded from Git.
+
+## Practical 3: Version the Digits dataset with DVC
+
+The dataset generator writes the Scikit-learn Digits dataset to
+`data/digits.csv`: 1,797 rows and 65 columns (64 pixel features and `target`).
+DVC tracks the CSV through `data/digits.csv.dvc` and stores its contents in the
+DVC cache and the configured local remote.
+
+Install the requirements above if you have not already. From the repository
+root, generate and track the dataset:
+
+```bash
+python create_dataset.py
+dvc init
+dvc add data/digits.csv
+git add create_dataset.py requirements.txt data/digits.csv.dvc data/.gitignore .gitignore .dvc .dvcignore
+git commit -m "Track digits dataset with DVC"
+```
+
+Configure and populate the local DVC remote:
+
+```bash
+mkdir dvc-storage
+dvc remote add -d localstorage ./dvc-storage
+dvc push
+git add .dvc/config
+git commit -m "Configure local DVC storage"
+git push
+```
+
+The local remote is machine-specific and is not shared with teammates. To push
+the dataset to shared storage, configure a shared DVC remote separately.

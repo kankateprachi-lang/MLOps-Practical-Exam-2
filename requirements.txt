@@ -4,3 +4,4 @@ feast
 pandas
 pyarrow
 mlflow
+dvc
