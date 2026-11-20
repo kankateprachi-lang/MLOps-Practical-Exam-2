@@ -1,0 +1,41 @@
+schema: '2.0'
+stages:
+  create_data:
+    cmd: python src/create_data.py
+    deps:
+    - path: src/create_data.py
+      hash: md5
+      md5: 7f0207f79bab807eb5eeff67b53b1744
+      size: 557
+    outs:
+    - path: data/raw/digits.csv
+      hash: md5
+      md5: ae875d20ca9f8dde5869bfecc6fd315b
+      size: 495301
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw/digits.csv
+      hash: md5
+      md5: ae875d20ca9f8dde5869bfecc6fd315b
+      size: 495301
+    - path: src/preprocess.py
+      hash: md5
+      md5: 1de473b3f80b91750a9e33bf99740e7c
+      size: 736
+    outs:
+    - path: data/processed/digits_processed.csv
+      hash: md5
+      md5: 37dcb2449bc2b2367bba2d2fa10e74ce
+      size: 572614
+  validate:
+    cmd: python src/validate.py
+    deps:
+    - path: data/processed/digits_processed.csv
+      hash: md5
+      md5: 37dcb2449bc2b2367bba2d2fa10e74ce
+      size: 572614
+    - path: src/validate.py
+      hash: md5
+      md5: 2623714e176868642db830bd9976a5ff
+      size: 969
