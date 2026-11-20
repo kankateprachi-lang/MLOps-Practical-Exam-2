@@ -1,16 +1,16 @@
-# Handwritten Digit Classification — MLOps Practicals 2 and 5
+# Handwritten Digit Classification — MLOps Practicals 2, 5, and 6
 
-Practical 2 builds and versions a baseline handwritten-digit classifier using
-the Scikit-learn Digits dataset. Practical 5 stores the same 1,797 examples,
-their 64 pixel features, and digit labels in a local Feast feature store.
-These are learning demonstrations, not OCR systems for arbitrary camera images.
+This repository contains three learning practicals using Scikit-learn's
+handwritten Digits dataset: a baseline classifier (Practical 2), a local Feast
+feature store (Practical 5), and experiment tracking with MLflow (Practical 6).
+These projects are demonstrations, not OCR systems for arbitrary camera images.
 
 ## Requirements
 
-- Python 3.11 or 3.12
+- Python 3.11
 - Git
 
-## Set up and run
+## Set up the environment
 
 Use Python 3.11 in a fresh virtual environment. From Git Bash, create and
 activate the environment, then install the project dependencies:
@@ -28,8 +28,8 @@ If `python` is not recognized on Windows, use `py --version` and
 `py -3.11 -m venv .venv` when creating the environment. After activation,
 `python` should refer to that environment.
 
-The script prints the dataset shape, test accuracy, and a classification report
-for digits 0–9. It saves the trained model to
+The Practical 2 script prints the dataset shape, test accuracy, and a
+classification report for digits 0–9. It saves the model to
 `models/digit_classifier.joblib`.
 
 ## Practical 5: Feast feature store
@@ -55,27 +55,54 @@ Feast commands and supported configuration can vary by version; use a fresh
 Python 3.11 environment and keep the installed Feast version consistent with
 the feature definitions and configuration.
 
+## Practical 6: MLflow experiment tracking
+
+The Practical 6 script trains Logistic Regression, Decision Tree, and Random
+Forest classifiers. It logs each model's test accuracy, weighted F1 score, and
+model artifact to MLflow, then saves the highest-accuracy model to
+`models/best_model`.
+
+## Start the MLflow tracking server
+
+In the first terminal, with the environment activated in the project folder,
+run:
+
+```bash
+mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000
+```
+
+Keep the server running. In a second Git Bash terminal opened in the same
+project folder, activate the environment and run the experiments:
+
+```bash
+source .venv/Scripts/activate
+python train_mlflow.py
+```
+
+The script prints each model's accuracy and weighted F1 score, then reports
+the best model and saves it to `models/best_model`. The tracking server must
+be running at `http://127.0.0.1:5000` while the script logs its runs.
+
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser on the same
+computer to compare the runs in the `Handwritten-Digit-Classification`
+experiment. Exact metric values may vary with package versions.
+
 ## Version the source with Git
 
-Create a separate empty GitHub repository for this member's work. Configure
-your Git identity once if needed:
+Configure your Git identity once if needed:
 
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your-email@example.com"
 ```
 
-In the project folder, stage and commit the source and dependency list:
+Stage and commit the practicals you want to include:
 
 ```bash
-git init
-git add README.md train_digits.py make_features.py retrieve_features.py feature_repo requirements.txt .gitignore
-git commit -m "Add Feast feature store for digits"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/digits-practical-5-member-4.git
-git push -u origin main
+git add README.md train_digits.py make_features.py retrieve_features.py feature_repo train_mlflow.py requirements.txt .gitignore
+git commit -m "Add MLflow digit classification experiments"
+git push
 ```
 
-Replace `YOUR-USERNAME` with your GitHub username. The virtual environment,
-generated model, and local Feast data/state are excluded from Git; the
-practicals version source rather than locally generated artifacts.
+The virtual environment, generated models, MLflow database and artifacts, and
+local Feast data/state are excluded from Git.

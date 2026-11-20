@@ -2,3 +2,7 @@
 __pycache__/
 models/
 feature_repo/data/
+mlartifacts/
+mlflow.db
+mlflow.db-shm
+mlflow.db-wal

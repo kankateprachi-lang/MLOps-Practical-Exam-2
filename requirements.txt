@@ -3,3 +3,4 @@ scikit-learn
 feast
 pandas
 pyarrow
+mlflow
